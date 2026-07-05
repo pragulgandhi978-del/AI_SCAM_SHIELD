@@ -1,6 +1,9 @@
 package com.scamshield.backend.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
@@ -25,8 +28,8 @@ public class JwtUtil {
 
         if (secret == null || secret.isBlank()) {
             throw new IllegalStateException(
-                "JWT_SECRET environment variable is not set. " +
-                "Please provide a secret of at least 32 characters.");
+                    "JWT_SECRET environment variable is not set. " +
+                            "Please provide a secret of at least 32 characters.");
         }
         // Support both raw strings and Base64-encoded secrets
         byte[] keyBytes;
@@ -40,7 +43,7 @@ public class JwtUtil {
         }
         if (keyBytes.length < 32) {
             throw new IllegalStateException(
-                "JWT_SECRET must be at least 32 characters long.");
+                    "JWT_SECRET must be at least 32 characters long.");
         }
         this.signingKey = Keys.hmacShaKeyFor(keyBytes);
         this.expirationMs = expirationMs;
@@ -70,20 +73,20 @@ public class JwtUtil {
 
     /** Extract the subject (email) from a token. */
     public String extractEmail(String token) {
-        return parseClaims(token).getPayload().getSubject();
+        return parseClaims(token).getBody().getSubject();
     }
 
     /** Extract the role claim from a token. */
     public String extractRole(String token) {
-        return parseClaims(token).getPayload().get("role", String.class);
+        return parseClaims(token).getBody().get("role", String.class);
     }
 
     // ── private helpers ──────────────────────────────────────────────────
 
     private Jws<Claims> parseClaims(String token) {
         return Jwts.parser()
-                .verifyWith(signingKey)
+                .setSigningKey(signingKey)
                 .build()
-                .parseSignedClaims(token);
+                .parseClaimsJws(token);
     }
 }
