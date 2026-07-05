@@ -1,0 +1,1 @@
+{"token":"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhbGljZUB0ZXN0LmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzgzMTkyMzg5LCJleHAiOjE3ODMyNzg3ODl9.t7ln94XrIpWN8imLjQDWWKtI_va93M1-vICElfEUV-_tTGmzHMxziXv2kShlUd-x","user":{"id":2,"name":"Alice","email":"alice@test.com","role":"USER"}}
